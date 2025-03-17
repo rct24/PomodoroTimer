@@ -4,6 +4,7 @@ body {
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 .pomodoro_timer {
   background-color: #ff6347;
@@ -57,7 +58,7 @@ footer {
   padding: 10px;
   text-align: center;
   width: 100%;
-  position: absolute;
+  position: fixed;
   bottom: 0;
 }
 
