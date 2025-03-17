@@ -1,9 +1,9 @@
-import { initialData, data, formatTime } from "../model.js";
+import { initialData, formatTime } from "../model.js";
 
-export class TimerView {
+class TimerView {
   _parentElement = document.querySelector(".pomodoro_timer");
   _timerDisplay = document.querySelector(".timer__display");
-  _timerControllers = document.querySelector(".timer-controls");
+  _timerControls = document.querySelector(".timer-controls");
   _errorMessage = "No timer data found";
   _message = "";
 
@@ -23,7 +23,7 @@ export class TimerView {
   }
 
   addHandlerClick(handler) {
-    this._timerControllers.addEventListener("click", function (e) {
+    this._timerControls.addEventListener("click", function (e) {
       e.preventDefault();
       const action = e.target.dataset.action;
 

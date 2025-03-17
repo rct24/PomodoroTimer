@@ -1,7 +1,8 @@
 export const initialData = {
-  _seconds: 5,
+  _seconds: 0,
   _minutes: 0,
   timer: null,
+  isRunning: false,
 };
 
 export let data = { ...initialData };
@@ -13,25 +14,39 @@ export function formatTime(value) {
   return `${formattedMinutes}:${formattedSeconds}`;
 }
 
-export function startTimer() {
-  const countDownSeconds = function () {
-    if (data._seconds > 0) {
-      data._seconds--;
-    } else {
-      clearInterval(data.timer);
-    }
-    document.dispatchEvent(new CustomEvent("timerUpdated", { detail: data }));
-  };
+function updateTimer() {
+  if (data._minutes > 0 && data._seconds === 0) {
+    data._minutes--;
+    data._seconds = 59;
+  } else if (data._minutes === 0 && data._seconds === 0) {
+    clearInterval(data.timer);
+    data.isRunning = false;
+  } else {
+    data._seconds--;
+  }
+  document.dispatchEvent(new CustomEvent("timerUpdated", { detail: data }));
+}
 
-  data.timer = setInterval(countDownSeconds, 1000);
+export function startTimer() {
+  if (data.isRunning) return;
+  data.isRunning = true;
+  data.timer = setInterval(updateTimer, 1000);
 }
 
 export function pauseTimer() {
+  data.isRunning = false;
   if (data.timer) clearInterval(data.timer);
 }
 
 export function resetTimer() {
   pauseTimer();
+  data = { ...initialData };
+  document.dispatchEvent(new CustomEvent("timerUpdated", { detail: data }));
+}
+
+export function setTimer(minutes, seconds) {
+  initialData._minutes = minutes;
+  initialData._seconds = seconds;
   data = { ...initialData };
   document.dispatchEvent(new CustomEvent("timerUpdated", { detail: data }));
 }
