@@ -1,4 +1,4 @@
-import * as model from "./../model.js";
+import * as model from "../timerModel.js";
 import timerView from "../views/timerView.js";
 
 const timerController = async function (action) {

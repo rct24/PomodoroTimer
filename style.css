@@ -72,6 +72,7 @@ footer {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
+  z-index: 1;
 }
 
 .pomodoro_durations button {
@@ -83,6 +84,7 @@ footer {
 
 canvas {
   position: absolute;
-
   z-index: 0;
+  border: #0d2d68 2px solid;
+  border-radius: 20px;
 }
