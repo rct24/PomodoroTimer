@@ -18,6 +18,7 @@ body {
   padding: 20px;
   text-align: center;
   align-items: center;
+  z-index: 1;
 }
 
 .pomodoro_timer__display {
@@ -43,6 +44,7 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
   height: 40px;
+  z-index: 2;
 }
 
 button:hover {
@@ -77,4 +79,10 @@ footer {
 }
 .pomodoro_durations button:last-child {
   margin-right: 0;
+}
+
+canvas {
+  position: absolute;
+
+  z-index: 0;
 }
