@@ -45,6 +45,7 @@ export function resetTimer() {
 }
 
 export function setTimer(minutes, seconds) {
+  pauseTimer();
   initialData._minutes = minutes;
   initialData._seconds = seconds;
   data = { ...initialData };
