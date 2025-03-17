@@ -1,5 +1,5 @@
 export const initialData = {
-  _seconds: 9,
+  _seconds: 5,
   _minutes: 0,
   timer: null,
 };

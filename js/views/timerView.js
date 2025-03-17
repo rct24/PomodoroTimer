@@ -2,7 +2,7 @@ import { initialData, data, formatTime } from "../model.js";
 
 export class TimerView {
   _parentElement = document.querySelector(".pomodoro_timer");
-  _timerDisplay = document.querySelector(".pomodoro_timer__display__time");
+  _timerDisplay = document.querySelector(".timer__display");
   _timerControllers = document.querySelector(".timer-controls");
   _errorMessage = "No timer data found";
   _message = "";

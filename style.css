@@ -21,7 +21,7 @@ body {
 
 .pomodoro_timer__display {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   font-size: 48px;
   margin-bottom: 20px;
