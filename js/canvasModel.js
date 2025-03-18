@@ -9,7 +9,7 @@ export const watchData = {
   get hours() {
     return this._now.getHours();
   },
-  radius: 500,
+  radius: 300,
 };
 
 export function updateTime() {
