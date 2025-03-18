@@ -16,8 +16,8 @@ class CanvasView {
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
 
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#0d2d68";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#607d8b";
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.arc(centerX, centerY, this.radius, 0, 2 * Math.PI);
@@ -34,7 +34,7 @@ class CanvasView {
       this.drawHand(
         centerX,
         centerY,
-        this.radius * 0.8,
+        this.radius * 0.6,
         this.toRadians(
           0.5 * (60 * model.watchData.hours + model.watchData.minutes)
         ),
@@ -123,20 +123,17 @@ class CanvasView {
   setHandStyles(ctx, type) {
     switch (type) {
       case "hour":
-        ctx.strokeStyle = "#0d2d68";
+        ctx.strokeStyle = "#1e3a5f";
         ctx.lineWidth = 8;
         break;
       case "minute":
         ctx.strokeStyle = "#0d2d68";
-        ctx.lineWidth = 6;
-        break;
-      case "second":
-        ctx.strokeStyle = "#ff4500";
         ctx.lineWidth = 4;
         break;
-      default:
-        ctx.strokeStyle = "#000";
+      case "second":
+        ctx.strokeStyle = "#607d8b";
         ctx.lineWidth = 2;
+        break;
     }
   }
 
