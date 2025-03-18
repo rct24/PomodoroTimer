@@ -1,25 +1,17 @@
-export const data = {
-  time: {
-    _now: 0,
-    _seconds: 0,
-    _minutes: 0,
-    _hours: 0,
+export const watchData = {
+  _now: new Date(),
+  get seconds() {
+    return this._now.getSeconds();
   },
-
-  center: null,
-  radius: 300,
-  canvas: null,
+  get minutes() {
+    return this._now.getMinutes();
+  },
+  get hours() {
+    return this._now.getHours();
+  },
+  radius: 500,
 };
 
-export function getTimeNow() {
-  const now = new Date();
-  data.time._now = now;
-  data.time._seconds = now.getSeconds();
-  data.time._minutes = now.getMinutes();
-  data.time._hours = now.getHours();
-  console.log(
-    `Local Time: ${data.time._hours}:${data.time._minutes}:${data.time._seconds}`
-  );
+export function updateTime() {
+  watchData._now = new Date();
 }
-
-//setInterval(getTimeNow, 1000);

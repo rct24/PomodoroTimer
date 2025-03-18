@@ -1,38 +1,45 @@
 import * as model from "../canvasModel.js";
 
 class CanvasView {
+  constructor() {
+    this.canvas = document.getElementById("canvas");
+    this.ctx = this.canvas.getContext("2d");
+    this.radius = model.watchData.radius;
+    this.canvas.width = this.radius * 2 + 10;
+    this.canvas.height = this.radius * 2 + 10;
+  }
+
   drawWatchFace() {
     if (canvas.getContext) {
-      const ctx = canvas.getContext("2d");
+      const { ctx, canvas } = this;
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const radius = model.data.radius;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.arc(centerX, centerY, this.radius, 0, 2 * Math.PI);
       ctx.lineWidth = 2;
       ctx.strokeStyle = "#0d2d68";
       ctx.stroke();
 
-      //hour hand
+      // Draw hour hand
       this.drawHand(
         centerX,
         centerY,
-        radius * 0.8,
+        this.radius * 0.8,
         this.toRadians(
-          0.5 * (60 * new Date().getHours() + new Date().getMinutes())
+          0.5 * (60 * model.watchData.hours + model.watchData.minutes)
         ),
         ctx,
         "hour"
       );
 
-      //minute hand
+      // Draw minute hand
       this.drawHand(
         centerX,
         centerY,
-        radius * 0.95,
-        this.toRadians(6 * new Date().getMinutes()),
+        this.radius * 0.95,
+        this.toRadians(6 * model.watchData.minutes),
         ctx,
         "minute"
       );
@@ -49,16 +56,19 @@ class CanvasView {
     const adjustedX = centerX + (length - offset) * Math.cos(angle);
     const adjustedY = centerY + (length - offset) * Math.sin(angle);
 
-    if (type === "hour") {
-      ctx.beginPath();
-      ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = "#0d2d68";
-      ctx.fill();
-    } else if (type === "minute") {
-      ctx.beginPath();
-      ctx.arc(adjustedX, adjustedY, 10, 0, 2 * Math.PI);
-      ctx.fillStyle = "#0d2d68";
-      ctx.fill();
+    switch (type) {
+      case "hour":
+        ctx.beginPath();
+        ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
+
+        ctx.fill();
+        break;
+      case "minute":
+        ctx.beginPath();
+        ctx.arc(adjustedX, adjustedY, 10, 0, 2 * Math.PI);
+
+        ctx.fill();
+        break;
     }
 
     ctx.moveTo(centerX, centerY);
@@ -71,13 +81,12 @@ class CanvasView {
       const ctx = canvas.getContext("2d");
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const radius = model.data.radius;
 
       this.drawHand(
         centerX,
         centerY,
-        radius,
-        this.toRadians(6 * new Date().getSeconds()),
+        this.radius,
+        this.toRadians(6 * model.watchData.seconds),
         ctx,
         "second"
       );
@@ -108,11 +117,8 @@ class CanvasView {
     }
   }
 
-  addHandlerRender() {
-    window.addEventListener("load", () => {
-      this.drawWatchFace();
-      this.startSecondsHand();
-    });
+  addHandlerRender(handler) {
+    window.addEventListener("load", handler);
   }
 
   startSecondsHand() {
