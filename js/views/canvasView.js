@@ -2,8 +2,6 @@ import * as model from "../models/canvasModel.js";
 
 class CanvasView {
   constructor() {
-    console.log(`canvas CONSTR hit`);
-
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.radius = model.watchData.radius;
@@ -18,8 +16,6 @@ class CanvasView {
   }
 
   drawDial() {
-    console.log(`watch face drawn`);
-
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.beginPath();
     this.ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
