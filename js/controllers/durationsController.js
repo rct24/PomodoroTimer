@@ -1,4 +1,4 @@
-import * as model from "../timerModel.js";
+import * as model from "../models/timerModel.js";
 import durationsView from "../views/durationsView.js";
 
 const durationsController = function (action) {

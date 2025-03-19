@@ -1,4 +1,4 @@
-import { initialData, formatTime } from "../timerModel.js";
+import { initialData, formatTime } from "../models/timerModel.js";
 
 class TimerView {
   _parentElement = document.querySelector(".pomodoro_timer");

@@ -1,151 +1,143 @@
-import * as model from "../canvasModel.js";
+import * as model from "../models/canvasModel.js";
 
 class CanvasView {
   constructor() {
+    console.log(`canvas CONSTR hit`);
+
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.radius = model.watchData.radius;
     this.canvas.width = this.radius * 2 + 20;
     this.canvas.height = this.radius * 2 + 20;
-    this.drawWatchNumbers();
+    this.centerX = this.canvas.width / 2;
+    this.centerY = this.canvas.height / 2;
+    this.previousSeconds = model.watchData.seconds;
+    this.previousMinutes = model.watchData.minutes;
+    this.previousHours = model.watchData.hours;
+    this.drawDial();
   }
 
-  drawWatchFace() {
-    if (canvas.getContext) {
-      const { ctx, canvas } = this;
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
+  drawDial() {
+    console.log(`watch face drawn`);
 
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "#607d8b";
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, this.radius, 0, 2 * Math.PI);
-      ctx.stroke();
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
+    this.ctx.stroke();
 
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, this.radius + 5, 0, 2 * Math.PI);
-      ctx.stroke();
-
-      //Draw numbers
-      this.drawWatchNumbers(centerX, centerY, this.radius * 0.95);
-
-      // Draw hour hand
-      this.drawHand(
-        centerX,
-        centerY,
-        this.radius * 0.6,
-        this.toRadians(
-          0.5 * (60 * model.watchData.hours + model.watchData.minutes)
-        ),
-        ctx,
-        "hour"
-      );
-
-      // Draw minute hand
-      this.drawHand(
-        centerX,
-        centerY,
-        this.radius * 0.95,
-        this.toRadians(6 * model.watchData.minutes),
-        ctx,
-        "minute"
-      );
-    }
+    this.ctx.beginPath();
+    this.ctx.arc(this.centerX, this.centerY, this.radius + 5, 0, 2 * Math.PI);
+    this.ctx.stroke();
+    this.drawDialNumbers();
+    this.drawHourHand();
+    this.drawMinuteHand();
+    this.drawSecondsHand();
   }
 
-  drawWatchNumbers(centerX, centerY, length, ctx) {
-    const numbers = Array.from(Array(13).keys());
-    numbers.shift();
-
+  drawDialNumbers() {
+    const numbers = Array.from(Array(13).keys()).slice(1);
+    const romanNumbers = [
+      "I",
+      "II",
+      "III",
+      "IV",
+      "V",
+      "VI",
+      "VII",
+      "VIII",
+      "IX",
+      "X",
+      "XI",
+      "XII",
+    ];
     this.ctx.font = "25px serif";
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = "middle";
+    this.ctx.fillStyle = "#607d8b";
+    const offset = 0.93;
 
-    numbers.forEach((i, number) => {
-      const x = centerX + length * Math.cos(this.toRadians(0.5 * (60 * i)));
-      const y = centerY + length * Math.sin(this.toRadians(0.5 * (60 * i)));
-      this.ctx.fillText(i, x, y);
+    romanNumbers.forEach((num, index) => {
+      const x =
+        this.centerX +
+        this.radius * offset * Math.cos(this.toRadians(30 * (index + 1)));
+      const y =
+        this.centerY +
+        this.radius * offset * Math.sin(this.toRadians(30 * (index + 1)));
+      this.ctx.fillText(num, x, y);
     });
   }
 
-  drawHand(centerX, centerY, length, angle, ctx, type) {
-    this.setHandStyles(ctx, type);
+  drawHand(length, angle, type) {
+    this.setHandStyles(type);
 
-    const x = centerX + length * Math.cos(angle);
-    const y = centerY + length * Math.sin(angle);
+    const x = this.centerX + length * Math.cos(angle);
+    const y = this.centerY + length * Math.sin(angle);
 
     const offset = 20;
-    const adjustedX = centerX + (length - offset) * Math.cos(angle);
-    const adjustedY = centerY + (length - offset) * Math.sin(angle);
+    const adjustedX = this.centerX + (length - offset) * Math.cos(angle);
+    const adjustedY = this.centerY + (length - offset) * Math.sin(angle);
 
-    switch (type) {
-      case "hour":
-        ctx.beginPath();
-        ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
-
-        ctx.fill();
-        break;
-      case "minute":
-        ctx.beginPath();
-        ctx.arc(adjustedX, adjustedY, 10, 0, 2 * Math.PI);
-
-        ctx.fill();
-        break;
+    if (type === "hour" || type === "minute") {
+      this.ctx.beginPath();
+      const radius = type === "hour" ? 5 : 10;
+      this.ctx.arc(adjustedX, adjustedY, radius, 0, 2 * Math.PI);
+      this.ctx.fill();
     }
 
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    this.ctx.moveTo(this.centerX, this.centerY);
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
   }
 
   drawSecondsHand() {
-    if (canvas.getContext) {
-      const ctx = canvas.getContext("2d");
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
+    this.drawHand(
+      this.radius,
+      this.toRadians(6 * model.watchData.seconds),
+      "second"
+    );
+  }
 
-      this.drawHand(
-        centerX,
-        centerY,
-        this.radius,
-        this.toRadians(6 * model.watchData.seconds),
-        ctx,
-        "second"
-      );
-    }
+  drawMinuteHand() {
+    this.drawHand(
+      this.radius * 0.95,
+      this.toRadians(6 * model.watchData.minutes),
+      "minute"
+    );
+  }
+
+  drawHourHand() {
+    this.drawHand(
+      this.radius * 0.6,
+      this.toRadians(
+        0.5 * (60 * model.watchData.hours + model.watchData.minutes)
+      ),
+      "hour"
+    );
   }
 
   toRadians(angle_inDegrees) {
     return (angle_inDegrees - 90) * (Math.PI / 180);
   }
 
-  setHandStyles(ctx, type) {
+  setHandStyles(type) {
     switch (type) {
       case "hour":
-        ctx.strokeStyle = "#1e3a5f";
-        ctx.lineWidth = 8;
+        this.ctx.strokeStyle = "#1e3a5f";
+        this.ctx.lineWidth = 8;
         break;
       case "minute":
-        ctx.strokeStyle = "#0d2d68";
-        ctx.lineWidth = 4;
+        this.ctx.strokeStyle = "#0d2d68";
+        this.ctx.lineWidth = 4;
         break;
       case "second":
-        ctx.strokeStyle = "#607d8b";
-        ctx.lineWidth = 2;
+        this.ctx.strokeStyle = "#607d8b";
+        this.ctx.lineWidth = 2;
         break;
     }
   }
 
-  addHandlerRender(handler) {
+  addHandlerOnLoad(handler) {
     window.addEventListener("load", handler);
-  }
-
-  startSecondsHand() {
-    setInterval(() => {
-      this.drawWatchFace();
-      this.drawSecondsHand();
-    }, 1000);
   }
 }
 
