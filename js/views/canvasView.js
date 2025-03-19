@@ -4,9 +4,10 @@ class CanvasView {
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.radius = model.watchData.radius;
-    this.canvas.width = this.radius * 2 + 20;
-    this.canvas.height = this.radius * 2 + 20;
+    this.internalRadius = model.watchData.radius;
+    this.externalRadius = this.internalRadius + 20;
+    this.canvas.width = this.internalRadius * 2 + 50;
+    this.canvas.height = this.internalRadius * 2 + 50;
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
     this.previousSeconds = model.watchData.seconds;
@@ -18,16 +19,48 @@ class CanvasView {
   drawDial() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.beginPath();
-    this.ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.internalRadius,
+      0,
+      2 * Math.PI
+    );
     this.ctx.stroke();
 
     this.ctx.beginPath();
-    this.ctx.arc(this.centerX, this.centerY, this.radius + 5, 0, 2 * Math.PI);
+    this.ctx.arc(
+      this.centerX,
+      this.centerY,
+      this.externalRadius,
+      0,
+      2 * Math.PI
+    );
+
     this.ctx.stroke();
+    this.drawDialLines();
     this.drawDialNumbers();
     this.drawHourHand();
     this.drawMinuteHand();
     this.drawSecondsHand();
+  }
+
+  drawDialLines() {
+    const minutesArray = Array.from({ length: 61 }, (_, i) => i);
+
+    minutesArray.forEach((i) => {
+      //const theta = this.toRadians(6 * i); //minutes/seconds
+      const theta = this.toRadians(0.5 * (60 * i)); //hours
+      const x = this.centerX + this.externalRadius * Math.cos(theta);
+      const y = this.centerY + this.externalRadius * Math.sin(theta);
+
+      const a = this.centerX + this.internalRadius * Math.cos(theta);
+      const b = this.centerY + this.internalRadius * Math.sin(theta);
+
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(a, b);
+      this.ctx.stroke();
+    });
   }
 
   drawDialNumbers() {
@@ -55,11 +88,15 @@ class CanvasView {
     romanNumbers.forEach((num, index) => {
       const x =
         this.centerX +
-        this.radius * offset * Math.cos(this.toRadians(30 * (index + 1)));
+        this.internalRadius *
+          offset *
+          Math.cos(this.toRadians(30 * (index + 1)));
 
       const y =
         this.centerY +
-        this.radius * offset * Math.sin(this.toRadians(30 * (index + 1)));
+        this.internalRadius *
+          offset *
+          Math.sin(this.toRadians(30 * (index + 1)));
 
       this.ctx.fillText(num, x, y);
     });
@@ -89,7 +126,7 @@ class CanvasView {
 
   drawSecondsHand() {
     this.drawHand(
-      this.radius,
+      this.internalRadius,
       this.toRadians(6 * model.watchData.seconds),
       "second"
     );
@@ -97,7 +134,7 @@ class CanvasView {
 
   drawMinuteHand() {
     this.drawHand(
-      this.radius * 0.95,
+      this.internalRadius * 0.95,
       this.toRadians(6 * model.watchData.minutes),
       "minute"
     );
@@ -105,7 +142,7 @@ class CanvasView {
 
   drawHourHand() {
     this.drawHand(
-      this.radius * 0.6,
+      this.internalRadius * 0.6,
       this.toRadians(
         0.5 * (60 * model.watchData.hours + model.watchData.minutes)
       ),
