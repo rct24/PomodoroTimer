@@ -60,9 +60,11 @@ class CanvasView {
       const x =
         this.centerX +
         this.radius * offset * Math.cos(this.toRadians(30 * (index + 1)));
+
       const y =
         this.centerY +
         this.radius * offset * Math.sin(this.toRadians(30 * (index + 1)));
+
       this.ctx.fillText(num, x, y);
     });
   }
