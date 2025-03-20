@@ -1,25 +1,26 @@
-import * as model from "../models/timerModel.js";
+import * as timerModel from "../models/timerModel.js";
+import * as canvasModel from "../models/canvasModel.js";
 import timerView from "../views/timerView.js";
 
 const timerController = function (action) {
   switch (action) {
     case "start":
-      if (model.data.isRunning) return;
-
-      model.startTimer();
+      if (timerModel.data.isRunning) return;
+      timerModel.startTimer();
+      canvasModel.setStart(canvasModel.watchData.seconds);
       break;
 
     case "pause":
-      if (!model.data.isRunning) return;
+      if (!timerModel.data.isRunning) return;
 
-      model.pauseTimer();
+      timerModel.pauseTimer();
       break;
 
     case "reset":
-      model.resetTimer();
+      timerModel.resetTimer();
       break;
   }
-  timerView.updateTimerDisplay(model.data);
+  timerView.updateTimerDisplay(timerModel.data);
 };
 
 export default timerController;

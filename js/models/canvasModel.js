@@ -11,10 +11,14 @@ export const watchData = {
   },
   radius: 300,
   dpr: window.devicePixelRatio || 1,
+  startMarkForMinuteaHand: 0,
 };
 
 export function updateTime() {
   watchData._now = new Date();
 }
 
-export function initializeStart() {}
+export function setStart(value) {
+  watchData.startMarkForMinuteaHand = value;
+  console.log(`startMarkForMinuteaHand: ${watchData.startMarkForMinuteaHand}`);
+}

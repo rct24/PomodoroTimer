@@ -1,20 +1,20 @@
-import * as model from "../models/canvasModel.js";
-
+import * as canvasModel from "../models/canvasModel.js";
+import * as timerModel from "../models/timerModel.js";
 class CanvasView {
-  initialStart = model.watchData.minutes;
+  initialStart = canvasModel.watchData.seconds;
 
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.internalRadius = model.watchData.radius;
+    this.internalRadius = canvasModel.watchData.radius;
     this.externalRadius = this.internalRadius + 20;
     this.canvas.width = this.internalRadius * 2 + 50;
     this.canvas.height = this.internalRadius * 2 + 50;
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
-    this.previousSeconds = model.watchData.seconds;
-    this.previousMinutes = model.watchData.minutes;
-    this.previousHours = model.watchData.hours;
+    this.previousSeconds = canvasModel.watchData.seconds;
+    this.previousMinutes = canvasModel.watchData.minutes;
+    this.previousHours = canvasModel.watchData.hours;
     this.drawDial();
   }
 
@@ -48,16 +48,23 @@ class CanvasView {
     this.drawMinuteHand();
     this.drawSecondsHand();
     this.drawDownwardTriangle(15);
-    this.drawLoading();
+
+    if (
+      timerModel.data.isRunning &&
+      timerModel.data._minutes !== 0 &&
+      timerModel.data._seconds !== 0
+    ) {
+      this.drawLoadingBar();
+    }
   }
 
-  drawLoading() {
+  drawLoadingBar() {
     let outerRadius = this.externalRadius - 3;
     let innerRadius = this.internalRadius + 3;
     const boundArc = this.ctx.arc.bind(this.ctx, this.centerX, this.centerY);
 
     let startAngle = this.degToRad(6 * this.initialStart);
-    let endAngle = this.degToRad(6 * model.watchData.minutes);
+    let endAngle = this.degToRad(6 * canvasModel.watchData.seconds);
 
     this.ctx.beginPath();
     // this.ctx.arc(this.centerX, this.centerY, outerRadius, startAngle, endAngle);
@@ -177,13 +184,17 @@ class CanvasView {
   }
 
   drawSecondsHand() {
-    this.drawHand(this.internalRadius, 6 * model.watchData.seconds, "second");
+    this.drawHand(
+      this.internalRadius,
+      6 * canvasModel.watchData.seconds,
+      "second"
+    );
   }
 
   drawMinuteHand() {
     this.drawHand(
       this.internalRadius * 0.95,
-      6 * model.watchData.minutes,
+      6 * canvasModel.watchData.minutes,
       "minute"
     );
   }
@@ -191,7 +202,7 @@ class CanvasView {
   drawHourHand() {
     this.drawHand(
       this.internalRadius * 0.6,
-      0.5 * (60 * model.watchData.hours + model.watchData.minutes),
+      0.5 * (60 * canvasModel.watchData.hours + canvasModel.watchData.minutes),
       "hour"
     );
   }
@@ -217,9 +228,6 @@ class CanvasView {
 
   addHandlerOnLoad(handler) {
     window.addEventListener("load", handler);
-  }
-  addHandlerClick(handler) {
-    window.addEventListener("click", handler);
   }
 }
 

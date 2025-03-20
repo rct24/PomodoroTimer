@@ -4,7 +4,7 @@ import durationsView from "./views/durationsView.js";
 import durationsController from "./controllers/durationsController.js";
 import {
   watchController,
-  loadController,
+  loadBarController,
 } from "./controllers/canvasController.js";
 import { setTimer } from "./models/timerModel.js";
 import canvasView from "./views/canvasView.js";
@@ -14,7 +14,6 @@ const init = function () {
   canvasView.addHandlerOnLoad(() => {
     setInterval(watchController, 1000);
   });
-  //canvasView.addHandlerClick(loadController);
   timerView.addHandlerClick(timerController);
   durationsView.addHandlerClick(durationsController);
 };

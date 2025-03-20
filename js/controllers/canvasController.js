@@ -1,5 +1,6 @@
 import * as model from "../models/canvasModel.js";
 import canvasView from "../views/canvasView.js";
+import * as timerModel from "../models/timerModel.js";
 
 export const watchController = function () {
   model.updateTime();
@@ -7,7 +8,4 @@ export const watchController = function () {
   canvasView.drawDial();
 };
 
-export const loadController = function () {
-  model.initializeStart();
-  //canvasView.drawLoading();
-};
+export const loadBarController = function () {};
