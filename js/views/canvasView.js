@@ -1,6 +1,8 @@
 import * as model from "../models/canvasModel.js";
 
 class CanvasView {
+  initialStart = model.watchData.minutes;
+
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
@@ -26,6 +28,8 @@ class CanvasView {
       0,
       2 * Math.PI
     );
+    this.ctx.fillStyle = "#f0f0f0";
+    this.ctx.fill();
     this.ctx.stroke();
 
     this.ctx.beginPath();
@@ -36,26 +40,80 @@ class CanvasView {
       0,
       2 * Math.PI
     );
-
     this.ctx.stroke();
-    this.drawDialLines();
+
+    //this.drawDialLines();
     this.drawDialNumbers();
     this.drawHourHand();
     this.drawMinuteHand();
     this.drawSecondsHand();
+    this.drawDownwardTriangle(15);
+    this.drawLoading();
+  }
+
+  drawLoading() {
+    let outerRadius = this.externalRadius - 3;
+    let innerRadius = this.internalRadius + 3;
+    const boundArc = this.ctx.arc.bind(this.ctx, this.centerX, this.centerY);
+
+    let startAngle = this.degToRad(6 * this.initialStart);
+    let endAngle = this.degToRad(6 * model.watchData.minutes);
+
+    this.ctx.beginPath();
+    // this.ctx.arc(this.centerX, this.centerY, outerRadius, startAngle, endAngle);
+    boundArc(outerRadius, startAngle, endAngle);
+
+    this.ctx.lineTo(
+      this.centerX + innerRadius * Math.cos(endAngle),
+      this.centerY + innerRadius * Math.sin(endAngle)
+    );
+    boundArc(innerRadius, endAngle, startAngle, true);
+
+    this.ctx.closePath();
+    this.ctx.fillStyle = "#78909c";
+    this.ctx.fill();
+    this.ctx.stroke();
+  }
+
+  drawDownwardTriangle(size) {
+    const angle = this.degToRad(0);
+    const triangleX =
+      this.centerX + (this.internalRadius + 5) * Math.cos(angle);
+    const triangleY =
+      this.centerY + (this.internalRadius + 5) * Math.sin(angle);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(triangleX, triangleY);
+    this.ctx.lineTo(triangleX - size / 2, triangleY - size);
+    this.ctx.lineTo(triangleX + size / 2, triangleY - size);
+
+    this.ctx.closePath();
+    this.ctx.fillStyle = "#607d8b";
+    this.ctx.fill();
   }
 
   drawDialLines() {
     const minutesArray = Array.from({ length: 61 }, (_, i) => i);
 
     minutesArray.forEach((i) => {
-      //const theta = this.toRadians(6 * i); //minutes/seconds
-      const theta = this.toRadians(0.5 * (60 * i)); //hours
-      const x = this.centerX + this.externalRadius * Math.cos(theta);
-      const y = this.centerY + this.externalRadius * Math.sin(theta);
+      //const angle = this.toRadians(6 * i); //minutes/seconds
+      const angle = this.degToRad(0.5 * (60 * i)); //hours
 
-      const a = this.centerX + this.internalRadius * Math.cos(theta);
-      const b = this.centerY + this.internalRadius * Math.sin(theta);
+      const calculateDialLineCoordinates = function (angle) {
+        const externalPoint = {
+          x: this.centerX + (this.externalRadius - 5) * Math.cos(angle),
+          y: this.centerY + (this.externalRadius - 5) * Math.sin(angle),
+        };
+
+        const internalPoint = {
+          a: this.centerX + (this.internalRadius + 5) * Math.cos(angle),
+          b: this.centerY + (this.internalRadius + 5) * Math.sin(angle),
+        };
+
+        return { ...externalPoint, ...internalPoint };
+      };
+
+      const { x, y, a, b } = calculateDialLineCoordinates(angle);
 
       this.ctx.moveTo(x, y);
       this.ctx.lineTo(a, b);
@@ -86,23 +144,17 @@ class CanvasView {
     const offset = 0.93;
 
     romanNumbers.forEach((num, index) => {
-      const x =
-        this.centerX +
-        this.internalRadius *
-          offset *
-          Math.cos(this.toRadians(30 * (index + 1)));
+      let angle = this.degToRad(30 * (index + 1));
+      const x = this.centerX + this.internalRadius * offset * Math.cos(angle);
 
-      const y =
-        this.centerY +
-        this.internalRadius *
-          offset *
-          Math.sin(this.toRadians(30 * (index + 1)));
+      const y = this.centerY + this.internalRadius * offset * Math.sin(angle);
 
       this.ctx.fillText(num, x, y);
     });
   }
 
   drawHand(length, angle, type) {
+    angle = this.degToRad(angle);
     this.setHandStyles(type);
 
     const x = this.centerX + length * Math.cos(angle);
@@ -125,17 +177,13 @@ class CanvasView {
   }
 
   drawSecondsHand() {
-    this.drawHand(
-      this.internalRadius,
-      this.toRadians(6 * model.watchData.seconds),
-      "second"
-    );
+    this.drawHand(this.internalRadius, 6 * model.watchData.seconds, "second");
   }
 
   drawMinuteHand() {
     this.drawHand(
       this.internalRadius * 0.95,
-      this.toRadians(6 * model.watchData.minutes),
+      6 * model.watchData.minutes,
       "minute"
     );
   }
@@ -143,16 +191,12 @@ class CanvasView {
   drawHourHand() {
     this.drawHand(
       this.internalRadius * 0.6,
-      this.toRadians(
-        0.5 * (60 * model.watchData.hours + model.watchData.minutes)
-      ),
+      0.5 * (60 * model.watchData.hours + model.watchData.minutes),
       "hour"
     );
   }
 
-  toRadians(angle_inDegrees) {
-    return (angle_inDegrees - 90) * (Math.PI / 180);
-  }
+  degToRad = (degrees) => ((degrees - 90) * Math.PI) / 180;
 
   setHandStyles(type) {
     switch (type) {
@@ -173,6 +217,9 @@ class CanvasView {
 
   addHandlerOnLoad(handler) {
     window.addEventListener("load", handler);
+  }
+  addHandlerClick(handler) {
+    window.addEventListener("click", handler);
   }
 }
 

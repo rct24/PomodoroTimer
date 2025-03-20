@@ -10,8 +10,11 @@ export const watchData = {
     return this._now.getHours();
   },
   radius: 300,
+  dpr: window.devicePixelRatio || 1,
 };
 
 export function updateTime() {
   watchData._now = new Date();
 }
+
+export function initializeStart() {}

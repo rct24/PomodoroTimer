@@ -1,9 +1,13 @@
 import * as model from "../models/canvasModel.js";
 import canvasView from "../views/canvasView.js";
 
-const canvasController = function () {
+export const watchController = function () {
   model.updateTime();
+
   canvasView.drawDial();
 };
 
-export default canvasController;
+export const loadController = function () {
+  model.initializeStart();
+  //canvasView.drawLoading();
+};
