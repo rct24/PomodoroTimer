@@ -12,11 +12,11 @@ canvas {
   z-index: 0;
   border: rgba(96, 125, 139, 0.5) 3px solid;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.5);
+  /* background-color: rgba(255, 255, 255, 0.5); */
 }
 .pomodoro_timer {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -150%);
   box-shadow: 0 0 20px rgba(3, 238, 109, 0);
@@ -25,10 +25,17 @@ canvas {
   font-family: "Elaris";
   justify-content: center;
   margin: 0;
-  /* padding: 20px; */
   text-align: center;
   align-items: center;
   z-index: 1;
+}
+
+.text_shadow_style {
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #607d8b, 1px -1px 0 #607d8b, -1px 1px 0 #607d8b,
+    1px 1px 0 #607d8b;
+  font-weight: italic;
 }
 
 .pomodoro_timer__display {
@@ -36,11 +43,10 @@ canvas {
   flex-direction: column;
   align-items: center;
   font-size: 35px;
-  /* margin-bottom: 20px; */
-  letter-spacing: 2px;
-  color: #607d8b;
+}
 
-  font-weight: italic;
+.brand_title {
+  font-size: 24px;
 }
 
 .timer_button {
@@ -94,11 +100,4 @@ footer {
 }
 .pomodoro_durations button:last-child {
   margin-right: 0;
-}
-
-.brand_title {
-  letter-spacing: 2px;
-  color: #607d8b;
-  font-size: 24px;
-  font-weight: italic;
 }
