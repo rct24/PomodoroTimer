@@ -56,7 +56,11 @@ class CanvasView {
     let innerRadius = this.internalRadius + 3;
     const boundArc = this.ctx.arc.bind(this.ctx, this.centerX, this.centerY);
 
-    if (timerModel.data.isRunning) {
+    if (
+      timerModel.data.isRunning &&
+      timerModel.data._minutes > 0 &&
+      timerModel.data._seconds > 0
+    ) {
       let startMinute = 6 * this.initialStart;
       let endMinute = 6 * canvasModel.watchData.minutes;
 
