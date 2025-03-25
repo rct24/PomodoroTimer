@@ -46,11 +46,7 @@ class CanvasView {
     this.drawSecondsHand();
     this.drawDownwardTriangle(15);
 
-    if (
-      (timerModel.data.isRunning || canvasModel.watchData.timerStarted) &&
-      timerModel.data._minutes !== 0 &&
-      timerModel.data._seconds !== 0
-    ) {
+    if (canvasModel.watchData.timerStarted) {
       this.drawLoadingBar();
     }
   }
@@ -60,10 +56,12 @@ class CanvasView {
     let innerRadius = this.internalRadius + 3;
     const boundArc = this.ctx.arc.bind(this.ctx, this.centerX, this.centerY);
 
-    let startAngle = this.degToRad(6 * this.initialStart);
-    let endAngle = this.degToRad(6 * canvasModel.watchData.minutes);
+    if (timerModel.data.isRunning) {
+      let startMinute = 6 * this.initialStart;
+      let endMinute = 6 * canvasModel.watchData.minutes;
 
-    canvasModel.setAngles({ start: startAngle, end: endAngle });
+      canvasModel.setAngles({ start: startMinute, end: endMinute });
+    }
 
     let angles = canvasModel.getAngles();
     console.log(angles.length);

@@ -1,27 +1,28 @@
 import * as timerModel from "../models/timerModel.js";
 import * as canvasModel from "../models/canvasModel.js";
 import timerView from "../views/timerView.js";
+import canvasView from "../views/canvasView.js";
 
 const timerController = function (action) {
   switch (action) {
     case "start":
-      canvasModel.setTimerStarted(true); // Set timer started flag
+      canvasModel.setTimerStarted(true);
       if (timerModel.data.isRunning) return;
       timerModel.startTimer();
 
-      //canvasModel.resetAngles(); // Reset angles on start
+      canvasView.initialStart = canvasModel.watchData.minutes;
+
       break;
 
     case "pause":
-      canvasModel.setTimerStarted(false);
       if (!timerModel.data.isRunning) return;
       timerModel.pauseTimer();
       break;
 
     case "reset":
       timerModel.resetTimer();
-      canvasModel.resetAngles(); // Reset angles on reset
-      canvasModel.setTimerStarted(false); // Reset timer started flag
+      canvasModel.resetAngles();
+      canvasModel.setTimerStarted(false);
       break;
   }
   timerView.updateTimerDisplay(timerModel.data);

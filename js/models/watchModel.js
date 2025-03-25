@@ -1,4 +1,4 @@
-import * as timerModel from "../models/timerModel.js";
+import * as timerModel from "./timerModel.js";
 
 export const watchData = {
   _now: new Date(),
@@ -16,38 +16,25 @@ export const watchData = {
   angles: [],
   timerStarted: false,
   degToRad: (degrees) => ((degrees - 90) * Math.PI) / 180,
-  initialAngle: 0,
 };
 
 export function updateTime() {
   watchData._now = new Date();
 }
 
-export function setAngles({ start, end }) {
-  const angles = watchData.angles;
-  const radStart = watchData.degToRad(start);
-  const radEnd = watchData.degToRad(end);
+export function updateAngles({ start, end }) {
+  //if (!timerModel.data.isRunning && !watchData.timerStarted) return;
 
-  // Handle empty array case first
-  if (angles.length === 0) {
-    angles.push({ start: radStart, end: radEnd });
-    return;
+  const lastElement = watchData.angles[watchData.angles.length - 1];
+
+  if (lastElement && lastElement.end === start) {
+    lastElement.end = end;
   }
 
-  const last = angles[angles.length - 1];
-
-  // Case 1: Continuation of previous segment
-  if (last.end === radStart) {
-    last.end = radEnd;
+  if (lastElement && lastElement.start !== start) {
+    watchData.angles.push({ start, end });
   }
-  // Case 2: Update existing segment's end
-  else if (last.start === radStart) {
-    last.end = radEnd;
-  }
-  // Case 3: Add new segment
-  else {
-    angles.push({ start: radStart, end: radEnd });
-  }
+  console.log(`Angles updated: ${JSON.stringify(watchData.angles)}`);
 }
 
 export function getAngles() {
@@ -63,3 +50,5 @@ export function setTimerStarted(value) {
   watchData.timerStarted = value;
   console.log(`Timer started: ${watchData.timerStarted}`);
 }
+
+const degToRad = (degrees) => ((degrees - 90) * Math.PI) / 180;
