@@ -36,16 +36,11 @@ export function setAngles({ start, end }) {
 
   const last = angles[angles.length - 1];
 
-  // Case 1: Continuation of previous segment
   if (last.end === radStart) {
     last.end = radEnd;
-  }
-  // Case 2: Update existing segment's end
-  else if (last.start === radStart) {
+  } else if (last.start === radStart) {
     last.end = radEnd;
-  }
-  // Case 3: Add new segment
-  else {
+  } else {
     angles.push({ start: radStart, end: radEnd });
   }
 }
@@ -56,10 +51,8 @@ export function getAngles() {
 
 export function resetAngles() {
   watchData.angles = [];
-  console.log(`Angles reset: ${JSON.stringify(watchData.angles)}`);
 }
 
 export function setTimerStarted(value) {
   watchData.timerStarted = value;
-  console.log(`Timer started: ${watchData.timerStarted}`);
 }

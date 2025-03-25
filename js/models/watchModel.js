@@ -23,8 +23,6 @@ export function updateTime() {
 }
 
 export function updateAngles({ start, end }) {
-  //if (!timerModel.data.isRunning && !watchData.timerStarted) return;
-
   const lastElement = watchData.angles[watchData.angles.length - 1];
 
   if (lastElement && lastElement.end === start) {

@@ -64,7 +64,6 @@ class CanvasView {
     }
 
     let angles = canvasModel.getAngles();
-    console.log(angles.length);
 
     angles.forEach(({ start, end }) => {
       this.ctx.beginPath();
