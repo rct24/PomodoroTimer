@@ -7,12 +7,8 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <div class="pomodoro_timer">
-      <div class="brand_title text_shadow_style">POMODORO</div>
-      <div class="pomodoro_timer__display">
-        <span class="timer__display text_shadow_style"></span>
-      </div>
+    <div class="canvas-container" style="position: relative">
+      <canvas id="canvas"></canvas>
       <label class="container play-button">
         <input type="checkbox" id="playPauseToggle" />
         <svg
@@ -36,6 +32,12 @@
           ></path>
         </svg>
       </label>
+    </div>
+    <div class="pomodoro_timer">
+      <div class="brand_title text_shadow_style">POMODORO</div>
+      <div class="pomodoro_timer__display">
+        <span class="timer__display text_shadow_style"></span>
+      </div>
     </div>
 
     <!-- <div class="pomodoro_durations" style="display: none"> -->

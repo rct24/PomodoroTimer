@@ -1,3 +1,4 @@
+/* General body styling for responsiveness */
 body {
   display: flex;
   justify-content: center;
@@ -5,15 +6,20 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  margin: 0; /* Remove any default margins */
 }
 
+/* Canvas styling */
 canvas {
-  position: relative;
+  position: relative; /* Make the canvas a positioning context */
   z-index: 0;
   border: rgba(96, 125, 139, 0.5) 3px solid;
   border-radius: 20px;
-  /* background-color: rgba(255, 255, 255, 0.5); */
+  min-width: 300px; /* Minimum width for the canvas */
+  min-height: 300px; /* Minimum height for the canvas */
 }
+
+/* Pomodoro Timer container */
 .pomodoro_timer {
   position: absolute;
   top: 45%;
@@ -24,47 +30,48 @@ canvas {
   flex-direction: column;
   font-family: "Elaris";
   justify-content: center;
-  margin: 0;
   text-align: center;
   align-items: center;
-  z-index: 1;
-}
-
-.text_shadow_style {
-  letter-spacing: 2px;
-  color: #ffffff;
-  text-shadow: -1px -1px 0 #607d8b, 1px -1px 0 #607d8b, -1px 1px 0 #607d8b,
-    1px 1px 0 #607d8b;
-  font-weight: italic;
 }
 
 .pomodoro_timer__display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 35px;
 }
 
 .brand_title {
-  font-size: 3rem;
+  font-size: 2.5rem; /* Restore original font size */
+  color: #ffffff; /* Ensure text color matches the original style */
+  text-shadow: -1px -1px 0 #607d8b, 1px -1px 0 #607d8b, -1px 1px 0 #607d8b,
+    1px 1px 0 #607d8b;
+}
+
+.timer__display {
+  font-size: 2rem; /* Restore original font size for the timer */
+  color: #ffffff; /* Ensure text color matches the original style */
+  text-shadow: -1px -1px 0 #607d8b, 1px -1px 0 #607d8b, -1px 1px 0 #607d8b,
+    1px 1px 0 #607d8b;
 }
 
 .timer_button {
   display: flex;
-  justify-content: center;
 }
 
+/* Buttons */
 button {
   background-color: #607d8b;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: calc(8px + 0.5vw) calc(16px + 0.5vw);
+  font-size: calc(14px + 0.5vw);
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
   height: 40px;
   z-index: 2;
+  min-width: 80px; /* Minimum width for buttons */
+  min-height: 40px; /* Minimum height for buttons */
 }
 
 button:hover {
@@ -75,31 +82,33 @@ button.active {
   background-color: #3498db;
 }
 
+/* Footer styling */
 footer {
   background-color: #f1f1f1;
-  padding: 10px;
+  padding: calc(8px + 0.5vw);
   text-align: center;
   width: 100%;
   position: fixed;
   bottom: 0;
 }
 
-.hidden {
-  display: none;
-}
-
+/* Pomodoro durations container */
 .pomodoro_durations {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-around; /* Default layout: space around the buttons */
   margin-top: 20px;
   z-index: 1;
+  flex-direction: row; /* Default layout: row */
 }
 
+/* Buttons in the durations container */
 .pomodoro_durations button {
-  margin-right: 10px;
-}
-.pomodoro_durations button:last-child {
-  margin-right: 0;
+  flex: 1; /* Make all buttons the same size */
+  max-width: 150px; /* Set a maximum width for the buttons */
+  min-width: 130px; /* Set a minimum width for the buttons */
+  margin: 5px; /* Add spacing between buttons */
+  padding: 10px; /* Add padding for better appearance */
+  text-align: center; /* Center the text inside the buttons */
 }
 
 /* From Uiverse.io by catraco */
@@ -170,13 +179,15 @@ footer {
   }
 }
 
-/* Center the play button relative to the canvas, but move it below the center */
+/* Center the play button relative to the canvas */
 .play-button {
-  position: absolute;
-  top: 315%; /* Move the button below the canvas center */
+  position: absolute; /* Position the button relative to the canvas */
+  top: 70%; /* Center vertically relative to the canvas */
   left: 50%; /* Center horizontally relative to the canvas */
   transform: translate(-50%, -50%); /* Adjust for the button's size */
   z-index: 2; /* Ensure it appears above the canvas */
+  padding: 20px; /* Add padding to make the clickable area larger */
+  pointer-events: auto; /* Ensure the button is clickable */
 }
 
 /* Adjust the size and appearance of the play button */
@@ -188,4 +199,46 @@ footer {
     1px -1px 0 var(--shadow-color, #607d8b),
     -1px 1px 0 var(--shadow-color, #607d8b),
     1px 1px 0 var(--shadow-color, #607d8b);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  /* Adjust canvas size for smaller screens */
+  canvas {
+    width: auto; /* Allow it to scale based on parent container */
+    max-width: 90%; /* Ensure it doesn't exceed the screen width */
+    min-width: 300px; /* Minimum width for the canvas */
+    min-height: 300px; /* Minimum height for the canvas */
+  }
+
+  .play-button {
+    top: 65%; /* Adjust position for smaller screens */
+  }
+
+  .brand_title {
+    font-size: 2rem; /* Reduce font size for smaller screens */
+  }
+
+  .timer__display {
+    font-size: 1.5rem; /* Reduce font size for the timer on smaller screens */
+  }
+
+  button {
+    font-size: 12px; /* Reduce button font size */
+    padding: 8px 12px; /* Adjust button padding */
+    min-width: 60px; /* Minimum width for buttons on smaller screens */
+    min-height: 30px; /* Minimum height for buttons on smaller screens */
+  }
+
+  .pomodoro_durations {
+    flex-direction: column; /* Switch to column layout on smaller screens */
+    align-items: center; /* Align buttons to the center of the canvas */
+    gap: 10px; /* Add spacing between buttons */
+    margin-top: 0; /* Remove extra margin to align with the canvas */
+  }
+
+  .pomodoro_durations button {
+    width: 80%; /* Make buttons take up 80% of the container width */
+    max-width: none; /* Remove the maximum width restriction */
+  }
 }
